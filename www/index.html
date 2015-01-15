@@ -14,10 +14,33 @@
     <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body>
-    <p>WYSIWYG Markdown Editor</p>
+    <div id="md-wysiwyg" class="md-wysiwyg">
+        <div class="input">
+            <div class="input-btns" id="input-btns">
+                <span class="input-btn" id="btn-h1">h1</span>
+                <span class="input-btn" id="btn-h2">h2</span>
+                <span class="input-btn" id="btn-h3">h3</span>
+                <span class="input-btn" id="btn-h4">h4</span>
+                <span class="input-btn" id="btn-h5">h5</span>
+                <span class="input-btn" id="btn-h6">h6</span>
+                <span class="input-btn" id="btn-ul">ul</span>
+                <span class="input-btn" id="btn-ol">ol</span>
+                <span class="input-btn" id="btn-quote">qu</span>
+                <span class="input-btn" id="btn-codeBlock">cd</span>
+                <span class="input-btn" id="btn-hr">hr</span>
+            </div>
+            <form action="#" method="post">
+                <textarea id="md-input" class="md-input" cols="40" rows="10"></textarea>
+            </form>
+        </div>
+        <div class="output">
+            <div class="html-output" id="html-output"></div>
+        </div>
+    </div>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+    <script src="js/md-wysiwyg.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
