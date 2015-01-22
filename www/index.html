@@ -8,6 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>WYSIWYG Markdown Editor</title>
     <meta name="description" content="What you see is what you get markdown editor">
+    <meta name="description" content="What you see is what you get markdown editor">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
@@ -15,6 +16,11 @@
 </head>
 <body>
     <div id="md-wysiwyg" class="md-wysiwyg">
+        <div class="menu">
+            <div class="logo">
+                <img  id="logo" src="./img/logo_web_2.png" height="30"/>
+            </div>
+        </div>
         <div class="input">
             <div class="input-btns" id="input-btns">
                 <span class="input-btn" id="btn-h1">h1</span>
@@ -34,6 +40,11 @@
             </form>
         </div>
         <div class="output">
+            <div class="export-btns" id="export-btns">
+                <span class="export-btn" id="btn-export-html">&#11015; export html</span>
+                <span class="export-btn" id="btn-export-pdf">&#11015; export pdf</span>
+                <span class="export-btn" id="btn-export-md">&#11015; export md</span>
+            </div>
             <div class="html-output" id="html-output"></div>
         </div>
     </div>
