@@ -19,47 +19,55 @@
     <script src="js/vendor/jspdf.plugin.standard_fonts_metrics.js"></script>
     <script src="js/vendor/jspdf.plugin.split_text_to_size.js"></script>
     <script src="js/vendor/FileSaver.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 </head>
 <body>
     <div id="md-wysiwyg" class="md-wysiwyg">
         <div class="menu" id="menu">
-            <div class="logo">
-                <img id="logo" src="./img/logo_web_2.png" height="30">
-            </div>
+            <a class="a-hide" id="logo-link">
+                <div class="logo">
+                    <img id="logo" src="./img/logo_web_2.png" height="30">
+                </div>
+            </a>
+<!--            <div class="div-hide" id="about">
+                    <p>WYSIWYG Markdown Editor Plugin for jQuery | started December 2014</p>
+                    <p>Team: Catharina Hahnfeld, Martin Wilmer, Tobias Wei&szlig</p>
+                </div>><!-->
+            <i class="fa fa-question-circle fa-lg" id="btn-help"></i>
         </div>
-        <div class="input" id="input">
-            <div class="input-btns" id="input-btns">
-                <span class="input-btn" id="btn-h1">h1</span>
-                <span class="input-btn" id="btn-h2">h2</span>
-                <span class="input-btn" id="btn-h3">h3</span>
-                <span class="input-btn" id="btn-h4">h4</span>
-                <span class="input-btn" id="btn-h5">h5</span>
-                <span class="input-btn" id="btn-h6">h6</span>
-                <span class="input-btn" id="btn-ul">ul</span>
-                <span class="input-btn" id="btn-ol">ol</span>
-                <span class="input-btn" id="btn-quote">qu</span>
-                <span class="input-btn" id="btn-codeBlock">cd</span>
-                <span class="input-btn" id="btn-hr">hr</span>
-            </div>
-            <form action="#" method="post">
-                <textarea id="md-input" class="md-input" cols="40" rows="10"></textarea>
-            </form>
-        </div>
-        <div class="output" id="output">
-            <div class="export-btns" id="export-btns">
-                <span class="export-btn" id="btn-export-html">&#11015; export html</span>
-                <span class="export-btn" id="btn-export-pdf">&#11015; export pdf</span>
-                <span class="export-btn" id="btn-export-md">&#11015; export md</span>
-                <span class="export-btn" id="btn-export-print">&#11015; print</span>
-            </div>
-            <div class="html-output" id="html-output"></div>
-        </div>
-    </div>
+                    <div class="input" id="input">
+                        <div class="input-btns" id="input-btns">
+                            <span class="input-btn" id="btn-h1"><i class="fa fa-header">1</i></span>
+                            <span class="input-btn" id="btn-h2"><i class="fa fa-header">2</i></span>
+                            <span class="input-btn" id="btn-h3"><i class="fa fa-header">3</i></span>
+                            <span class="input-btn" id="btn-h4"><i class="fa fa-header">4</i></span>
+                            <span class="input-btn" id="btn-h5"><i class="fa fa-header">5</i></span>
+                            <span class="input-btn" id="btn-h6"><i class="fa fa-header">6</i></span>
+                            <span class="input-btn" id="btn-ul"><i class="fa fa-list-ul"></i></span>
+                            <span class="input-btn" id="btn-ol"><i class="fa fa-list-ol"></i></span>
+                            <span class="input-btn" id="btn-quote"><i class="fa fa-quote-right"></i></span>
+                            <span class="input-btn" id="btn-codeBlock"><i class="fa fa-code"></i></span>
+                            <span class="input-btn" id="btn-hr">__</span>
+                        </div>
+                        <form action="#" method="post">
+                            <textarea id="md-input" class="md-input" cols="40" rows="10"></textarea>
+                        </form>
+                    </div>
+                    <div class="output" id="output">
+                        <div class="export-btns" id="export-btns">
+                            <span class="export-btn" id="btn-export-html"><i class="fa fa-arrow-circle-down"></i> export .html</span>
+                            <span class="export-btn" id="btn-export-pdf"><i class="fa fa-arrow-circle-down"></i> export .pdf</span>
+                            <span class="export-btn" id="btn-export-md"><i class="fa fa-arrow-circle-down"></i> export .md</span>
+                            <span class="export-btn" id="btn-export-print"><i class="fa fa-print"></i> print</span>
+                        </div>
+                        <div class="html-output" id="html-output"></div>
+                    </div>
+                </div>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
-    <script src="js/md-wysiwyg.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/export.js"></script>
-</body>
-</html>
+                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+                <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+                <script src="js/md-wysiwyg.js"></script>
+                <script src="js/main.js"></script>
+                <script src="js/export.js"></script>
+            </body>
+            </html>
