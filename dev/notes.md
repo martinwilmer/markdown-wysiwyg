@@ -14,6 +14,7 @@
     + pass wrapper element selector to plugin as parameter
     + test and fix pdf export (images don't work)
     + export html with inline css
+    + inline html input support
 
 
 ## Version 0.1 - 15 Jan 2015

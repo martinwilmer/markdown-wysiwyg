@@ -16,6 +16,7 @@ label {
     height: 100%;
     background: #fff;
     display: block;
+    overflow: hidden;
 }
 .menu {
     width: 100%;
@@ -138,6 +139,7 @@ label {
 }
 .html-output {
     padding: 20px;
+    overflow-y: auto;
 }
 .html-output h1,
 .html-output h2,
