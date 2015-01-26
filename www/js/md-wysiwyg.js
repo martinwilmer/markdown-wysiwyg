@@ -4,9 +4,13 @@
     var pluginName = "markdownwysiwyg",
         defaults = {
             selectors: {
-                outputWrapper: '#html-output',
+                menuWrapper: '#menu',
+                inputWrapper: '#input',
+                outputWrapper: '#output',
+                htmlOutput: '#html-output',
                 inputTextarea: '#md-input',
-                inputButtons: '#input-btns'
+                inputButtons: '#input-btns',
+                exportButtons: '#export-btns'
             }
         },
         // markdown element definitions (atx-styled headers only)
@@ -88,9 +92,14 @@
             // vars for comfortable access on dom elements
             this.$inputTextarea = $(this.settings.selectors.inputTextarea, this.element);
             this.$inputButtons = $(this.settings.selectors.inputButtons, this.element);
+            this.$exportButtons = $(this.settings.selectors.exportButtons, this.element);
+            this.$htmlOutput = $(this.settings.selectors.htmlOutput, this.element);
+            this.$menuWrapper = $(this.settings.selectors.menuWrapper, this.element);
+            this.$inputWrapper = $(this.settings.selectors.inputWrapper, this.element);
             this.$outputWrapper = $(this.settings.selectors.outputWrapper, this.element);
 
             this.bindEvents();
+            this.resizePlugin();
             this.focusTextarea();
         },
 
@@ -127,6 +136,10 @@
                 self.focusTextarea();
                 self.insertMarkdownTag(this.getAttribute('id').split('-')[1]);
             });
+
+            $(window).on('resize', function() {
+                self.resizePlugin();
+            });
         },
 
         focusTextarea: function() {
@@ -151,7 +164,7 @@
                 self = this;
 
             // clear html output
-            self.$outputWrapper.html("");
+            self.$htmlOutput.html("");
 
             $.each(lines, function(lineNumber, line) {
                 lineTypeParsed = false;
@@ -296,7 +309,7 @@
 
             // print output
             $.each(output, function(index, value) {
-                self.$outputWrapper.append(value);
+                self.$htmlOutput.append(value);
             });
         },
 
@@ -332,6 +345,28 @@
 
             // put caret at right position again
             this.$inputTextarea[0].selectionStart = this.$inputTextarea[0].selectionEnd = start + caretPositionDifference;
+        },
+
+        resizePlugin: function() {
+            var $form = this.$inputTextarea.parent(),
+                inputHeight = this.$element.outerHeight() -
+                    this.$menuWrapper.outerHeight(),
+                inputButtonsHeight = this.$inputButtons.outerHeight(),
+                formHeight = inputHeight -
+                    inputButtonsHeight -
+                    parseInt($form.css('padding-top')) -
+                    parseInt($form.css('padding-bottom')),
+                htmlOutputHeight = inputHeight -
+                    inputButtonsHeight -
+                    parseInt(this.$htmlOutput.css('padding-top')) -
+                    parseInt(this.$htmlOutput.css('padding-bottom'));
+
+            this.$inputWrapper.height(inputHeight);
+            $form.height(formHeight);
+
+            this.$outputWrapper.height(inputHeight);
+            this.$exportButtons.height(inputButtonsHeight);
+            this.$htmlOutput.height(htmlOutputHeight);
         }
 
     });
