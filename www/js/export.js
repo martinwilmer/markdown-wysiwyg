@@ -42,3 +42,7 @@ $('#btn-export-pdf').click( function(){
 	});
 	doc.save('export.pdf');
 });
+
+$('#btn-export-print').click( function(){
+    window.print();
+});
