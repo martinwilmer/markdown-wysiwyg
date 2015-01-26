@@ -352,17 +352,22 @@
                 inputHeight = this.$element.outerHeight() -
                     this.$menuWrapper.outerHeight(),
                 inputButtonsHeight = this.$inputButtons.outerHeight(),
-                formHeight = inputHeight -
-                    inputButtonsHeight -
-                    parseInt($form.css('padding-top')) -
-                    parseInt($form.css('padding-bottom')),
+                inputFormHeight = inputHeight -
+                    inputButtonsHeight,
+                inputTextareaHeight = inputFormHeight -
+                    parseInt(this.$inputTextarea.css('padding-top')) -
+                    parseInt(this.$inputTextarea.css('padding-bottom')),
+                inputTextareaWidth = this.$inputWrapper.outerWidth() -
+                    parseInt(this.$inputTextarea.css('padding-left')) -
+                    parseInt(this.$inputTextarea.css('padding-right')),
                 htmlOutputHeight = inputHeight -
                     inputButtonsHeight -
                     parseInt(this.$htmlOutput.css('padding-top')) -
                     parseInt(this.$htmlOutput.css('padding-bottom'));
 
             this.$inputWrapper.height(inputHeight);
-            $form.height(formHeight);
+            $form.height(inputFormHeight);
+            this.$inputTextarea.width(inputTextareaWidth).height(inputTextareaHeight);
 
             this.$outputWrapper.height(inputHeight);
             this.$exportButtons.height(inputButtonsHeight);

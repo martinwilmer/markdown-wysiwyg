@@ -89,11 +89,9 @@ label {
     text-decoration: none;
 }
 
-.input form {
-    padding: 20px;
-}
 .md-input {
     border: 0;
+    padding: 20px;
     resize: none;
     background: transparent;
     color: #d8dde4;
