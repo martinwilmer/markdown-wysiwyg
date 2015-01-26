@@ -19,9 +19,9 @@
                 h3: /^###/,
                 h2: /^##/,
                 h1: /^#/,
-                hr: /^\*\*\*|---/,
-                ul: /^[-\*+]/,
-                ol: /^[1-9]\./,
+                hr: /^\*\*\*\**|- ?- ?--*/,
+                ul: /^([\t]*)[-\*+]/,
+                ol: /^([\t]*)[1-9]\./,
                 quote: /^>/,
                 codeBlock: /^\t/
             },
@@ -31,7 +31,8 @@
                 em: /\*([^\*]+)\*|_([^_]+)_/,
                 code: /``([^`]+)``/,
                 img: /!\[([^\[\]]*)\] ?\(([^\(\)]*)\)/,
-                a: /\[([^\[\]]*)\] ?\(([^\(\)]*)\)/
+                a: /\[([^\[\]]*)\] ?\(([^"\(\) ]*)( "([^"\(\)]*)")?\)/,
+                br: / {2,}/
             },
             html: {
                 h1: $('<h1/>'),
@@ -46,12 +47,13 @@
                 li: $('<li/>'),
                 quote: $('<blockquote/>'),
                 codeBlock: $('<pre/>'),
-                hr: $('<hr/>'),
+                hr: $('<hr>'),
                 em: $('<em/>'),
                 strong: $('<strong/>'),
                 code: $('<code/>'),
                 img: $('<img/>'),
-                a: $('<a/>')
+                a: $('<a/>'),
+                br: $('<br>')
             }
         },
         mdButtons = {
@@ -139,9 +141,13 @@
                 lineTypeParsed,
                 lastLineType = null,
                 lineContent,
+                lineMatch,
+                key,
+                nestedLevel,
                 spanElement,
                 lineContainsSpan,
                 currentContainer = null,
+                currentNestedContainer = null,
                 self = this;
 
             // clear html output
@@ -150,8 +156,11 @@
             $.each(lines, function(lineNumber, line) {
                 lineTypeParsed = false;
 
-                // skip empty lines
+                // handle empty lines
                 if ($.trim(line).length < 1) {
+                    currentContainer = null;
+                    currentNestedContainer = null;
+                    lastLineType = null;
                     return true;
                 }
 
@@ -167,12 +176,18 @@
                             // handle anchors
                             if (key === 'a') {
                                 spanElement = mdElements.html[key].clone().html(res[1]).attr('href', res[2]);
+                                if (res[4] !== undefined) {
+                                    spanElement.attr('title', $.trim(res[4]));
+                                }
 
                             // handle images
                             } else if (key === 'img') {
                                 spanElement = mdElements.html[key].clone().attr('alt', res[1]).attr('src', res[2]);
 
-                            // handle strong, em, code etc.
+                            } else if (key === 'br') {
+                                spanElement = mdElements.html[key].clone();
+
+                            // handle strong, em, code
                             } else {
                                 var content = res[1] === undefined ? res[2] : res[1];
                                 spanElement = mdElements.html[key].clone().html(content);
@@ -190,22 +205,49 @@
                 // parse block elements
                 $.each(mdElements.block, function(key, regex) {
 
-                    // test block element regex
+                    // match block element regex
                     if (line.search(regex) !== -1) {
-                        lineContent = $.trim(line.replace(regex, ''));
+                        lineContent = line.replace(regex, '');
+                        //lineContent = $.trim(line.replace(regex, ''));
 
-                        // close current container element if new element type is recognized
-                        if ($.inArray(lastLineType, ['ul', 'ol', 'quote', 'codeBlock']) !== -1 && key !== lastLineType) {
+                        // push current container element if new element type is recognized
+                        if ($.inArray(lastLineType, ['p', 'ul', 'ol', 'quote', 'codeBlock']) !== -1 && key !== lastLineType) {
                             currentContainer = null;
+                            currentNestedContainer = null;
                         }
 
                         // handle lists
                         if (key === 'ul' || key === 'ol') {
-                            if (currentContainer === null) {
-                                // open new parent container
-                                currentContainer = mdElements.html[key].clone();
+                            //nestedLevel = 0;
+
+                            // check if list element is nested
+                            lineMatch = regex.exec(line);
+                            if (lineMatch[1].length > 0 && currentContainer !== null) {
+                                //nestedLevel = lineMatch[1].length;
+
+                                if (currentNestedContainer === null) {
+                                    // this is a list style type hack because the opened list element is empty
+                                    // doesnt work properly for ordered lists
+                                    currentNestedContainer = mdElements.html['li'].clone().css('list-style-type', 'none').append(mdElements.html[key].clone());
+
+                                }
+                                currentNestedContainer.children(key).append(mdElements.html['li'].clone().html(lineContent));
+                                lineContent = currentNestedContainer;
+
+                            // bottom level list element
+                            } else {
+                                currentNestedContainer = null;
+
+                                if (currentContainer === null) {
+                                    // open new parent container
+                                    currentContainer = mdElements.html[key].clone();
+                                }
+
+                                lineContent = mdElements.html['li'].clone().html(lineContent);
                             }
-                            currentContainer.append(mdElements.html['li'].clone().html(lineContent));
+
+                            currentContainer.append(lineContent);
+
                             output.push(currentContainer);
 
                         // handle quotes and code blocks
@@ -214,10 +256,18 @@
                                 // open new parent container
                                 currentContainer = mdElements.html[key].clone();
                             }
-                            currentContainer.append(lineContent+'<br/>');
+
+                            // add line breaks to code blocks
+                            lineContent = key === 'codeBlock' ? lineContent + '\n': lineContent + ' ';
+
+                            currentContainer.html(currentContainer.html() + lineContent);
                             output.push(currentContainer);
 
-                        // handle headings and horizontal lines
+                        // handle horizontal lines
+                        } else if (key === 'hr') {
+                            output.push(mdElements.html[key].clone());
+
+                        // handle headings
                         } else {
                             output.push(mdElements.html[key].clone().html(lineContent));
                         }
@@ -232,13 +282,15 @@
 
                 // handle paragraphs (no markdown tag)
                 if (!lineTypeParsed) {
+                    key = 'p';
 
-                    if (currentContainer !== null) {
-                        currentContainer = null;
+                    if (lastLineType !== key) {
+                        currentContainer = mdElements.html[key].clone();
                     }
 
-                    output.push(mdElements.html['p'].clone().html($.trim(line)));
-                    lastLineType = 'p';
+                    currentContainer.html(currentContainer.html() + $.trim(line) + ' ');
+                    output.push(currentContainer);
+                    lastLineType = key;
                 }
             });
 

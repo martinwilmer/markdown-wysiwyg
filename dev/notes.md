@@ -1,5 +1,21 @@
 # Notes
 
+## Version 0.2 - 26 Jan 2015
+- newly implemented features:
+    + indents in code blocks
+    + nested lists (two levels)
+    + multiple lines per paragraph
+    + title on anchors
+    + manual line breaks by (at least) two indents
+
+- not (yet) implemented features, todo stuff:
+    + special chars escaping
+    + buttons for selection markup of span elements
+    + pass wrapper element selector to plugin as parameter
+    + test and fix pdf export (images don't work)
+    + export html with inline css
+
+
 ## Version 0.1 - 15 Jan 2015
 - implemented features:
     + parse block elements:
