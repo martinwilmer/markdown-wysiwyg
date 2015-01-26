@@ -24,21 +24,21 @@ $('#btn-export-html').click( function(){
 	saveData(html_output, "export.html", "html");
 });
 
+$('#btn-export-md').click( function(){
+	var text = $("#md-input").val();
+  	saveData(text, "export.md", "md")
+});
+
 $('#btn-export-pdf').click( function(){
 	var specialElementHandlers = {
-		'#editor': function(element, renderer){
+		'#ignorePDF': function(element, renderer){
 			return true;
 		}
 	};
-
+	var text = $("#html-output")[0];
 	var doc = new jsPDF();
 	doc.fromHTML(text, 15, 15, {
 		'width': 170
 	});
 	doc.save('export.pdf');
-});
-
-$('#btn-export-md').click( function(){
-	var text = $("#md-input").val();
-  	saveData(text, "export.md", "md")
 });
