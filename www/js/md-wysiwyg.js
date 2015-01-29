@@ -71,7 +71,9 @@
             ul: "-",
             ol: "1.",
             quote: ">",
-            codeBlock: "\t"
+            codeBlock: "\t",
+            img: "![alternativ text](/path/to/image)",
+            a: "[anchor name](https://url.com)"
         };
 
     // The actual plugin constructor
@@ -349,8 +351,8 @@
 
         resizePlugin: function() {
             var $form = this.$inputTextarea.parent(),
-                inputHeight = this.$element.outerHeight() -
-                    this.$menuWrapper.outerHeight(),
+                menuHeight = this.$menuWrapper.is(':visible') ? this.$menuWrapper.outerHeight() : 0;
+                inputHeight = this.$element.outerHeight() - menuHeight,
                 inputButtonsHeight = this.$inputButtons.outerHeight(),
                 inputFormHeight = inputHeight -
                     inputButtonsHeight,

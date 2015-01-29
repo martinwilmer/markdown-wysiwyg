@@ -1,7 +1,7 @@
 @media print { 
  /* All your print styles go here */
  .menu, .input, .export-btns { display: none !important; } 
- .outpu,.html-output { 
+ .output,.html-output {
  	display: block !important; 
 	width: auto !important;
 	height: auto !important;
