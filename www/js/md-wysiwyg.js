@@ -61,19 +61,26 @@
             }
         },
         mdButtons = {
-            h6: "######",
-            h5: "#####",
-            h4: "####",
-            h3: "###",
-            h2: "##",
-            h1: "#",
-            hr: "---",
-            ul: "-",
-            ol: "1.",
-            quote: ">",
-            codeBlock: "\t",
-            img: "![alternativ text](/path/to/image)",
-            a: "[anchor name](https://url.com)"
+            position: {
+                h6: "######",
+                h5: "#####",
+                h4: "####",
+                h3: "###",
+                h2: "##",
+                h1: "#",
+                hr: "---\n",
+                ul: "-",
+                ol: "1.",
+                quote: ">",
+                codeBlock: "\t",
+                img: "![alternativ text](/path/to/image)",
+                a: "[anchor name](https://url.com)",
+            },
+            selection: {
+                strong: "**",
+                em: "*",
+                mono: "``"
+            }
         };
 
     // The actual plugin constructor
@@ -317,30 +324,40 @@
 
         insertMarkdownTag: function(btnId) {
             var start = this.$inputTextarea[0].selectionStart,
+                end = this.$inputTextarea[0].selectionEnd,
                 value = this.$inputTextarea.val(),
                 currentLine = value.substr(0, start).split('\n').length,
                 lines = value.split('\n'),
                 output = "",
+                lineStartCharNum = 0,
                 caretPositionDifference = 0;
 
             for (var i = 0; i < lines.length; i++) {
                 if (i == currentLine - 1) {
+                    if ($.inArray(btnId, ['strong', 'em', 'mono']) !== -1) {
+                        lines[i] = lines[i].substr(0,start - lineStartCharNum) + mdButtons.selection[btnId] +
+                            lines[i].substr(start - lineStartCharNum,end-start) + mdButtons.selection[btnId] +
+                            lines[i].substr(end-lineStartCharNum);
+                        caretPositionDifference = mdButtons.selection[btnId].length + end-start;
 
-                    // calc. caret positioning after tag insertion
-                    caretPositionDifference = mdButtons[btnId].length + 1;
+                    } else {
+                        // calc. caret positioning after tag insertion
+                        caretPositionDifference = mdButtons.position[btnId].length + 1;
 
-                    // remove old markdown tag (if necessary)
-                    $.each(mdButtons, function(key, value) {
-                        if (lines[i].search(value) !== -1) {
-                            lines[i] = $.trim(lines[i].replace(value, ''));
-                            caretPositionDifference -= value.length + 1;
-                        }
-                    });
+                        // remove old markdown tag (if necessary)
+                        $.each(mdButtons.position, function(key, value) {
+                            if (lines[i].search(value) !== -1) {
+                                lines[i] = $.trim(lines[i].replace(value, ''));
+                                caretPositionDifference -= value.length + 1;
+                            }
+                        });
 
-                    // insert new markdown tag
-                    output += mdButtons[btnId]+' ';
+                        // insert new markdown tag
+                        output += mdButtons.position[btnId]+' ';
+                    }
                 }
-                output += lines[i]+'\n';
+                output += lines[i] + '\n';
+                lineStartCharNum += lines[i].length + 1;
             }
             this.$inputTextarea.val(output);
             this.parseInput();
@@ -351,7 +368,7 @@
 
         resizePlugin: function() {
             var $form = this.$inputTextarea.parent(),
-                menuHeight = this.$menuWrapper.is(':visible') ? this.$menuWrapper.outerHeight() : 0;
+                menuHeight = this.$menuWrapper.is(':visible') ? this.$menuWrapper.outerHeight() : 0,
                 inputHeight = this.$element.outerHeight() - menuHeight,
                 inputButtonsHeight = this.$inputButtons.outerHeight(),
                 inputFormHeight = inputHeight -

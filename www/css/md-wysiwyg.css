@@ -1,10 +1,4 @@
-@media print { 
- /* All your print styles go here */
- .menu, .input, .export-btns { display: none !important; } 
- .output,.html-output {
- 	display: block !important; 
-	width: auto !important;
-	height: auto !important;
-	overflow: visible !important;
- }
+@media print {
+    /* All your print styles go here */
+    .menu, .input, .export-btns, .output { display: none !important; }
 }
